@@ -188,25 +188,21 @@ function explodeBomb(row, col) {
   for (let r = row - 1, i = 0; i < explosionRange.value; r--, i++) {
     if (grid.value[r] && grid.value[r][col] === 1) break
     positions.push({ row: r, col })
-    if (grid.value[r][col] === 2) break
   }
   // Down
   for (let r = row + 1, i = 0; i < explosionRange.value; r++, i++) {
     if (grid.value[r] && grid.value[r][col] === 1) break
     positions.push({ row: r, col })
-    if (grid.value[r][col] === 2) break
   }
   // Left
   for (let c = col - 1, i = 0; i < explosionRange.value; c--, i++) {
     if (grid.value[row] && grid.value[row][c] === 1) break
     positions.push({ row, col: c })
-    if (grid.value[row][c] === 2) break
   }
   // Right
   for (let c = col + 1, i = 0; i < explosionRange.value; c++, i++) {
     if (grid.value[row] && grid.value[row][c] === 1) break
     positions.push({ row, col: c })
-    if (grid.value[row][c] === 2) break
   }
   explosion.value = positions
   // Check if player is in explosion area
@@ -279,9 +275,7 @@ function restartGame() {
   gameOver.value = false
   gameWon.value = false
   powerItemVisible.value = false
-  powerItemPos.value = null
   bombCapacityItemVisible.value = false
-  bombCapacityItemPos.value = null
   explosionRange.value = 1
   maxBombs.value = 1
   activeBombs.value = 0
