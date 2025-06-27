@@ -1,5 +1,6 @@
 <template>
   <div class="bomberman-game">
+    <div class="timer">Time: {{ timer }}s</div>
     <div class="game-grid">
       <div
         v-for="(row, rowIndex) in grid"
@@ -25,9 +26,35 @@
     <template v-if="gameWon">
       <div class="game-won">
         Congratulations! You won the game.<br />
+        <span v-if="finalTime !== null">Time: {{ finalTime }}s</span><br />
         <button @click="restartGame">Play Again</button>
       </div>
     </template>
+    <div class="legend">
+      <div class="legend-row">
+        <span class="cell destructible legend-icon"></span>
+        <span>Breakable Wall</span>
+      </div>
+      <div class="legend-row">
+        <span class="cell bomb legend-icon"></span>
+        <span>Bomb</span>
+      </div>
+      <div class="legend-row">
+        <span class="cell power-item legend-icon"></span>
+        <span>Bomb Area Powerup</span>
+      </div>
+      <div class="legend-row">
+        <span class="cell bomb-capacity-item legend-icon"></span>
+        <span>Multiple Bombs Powerup</span>
+      </div>
+      <div class="instructions">
+        <strong>Instructions:</strong><br />
+        Use <b>arrow keys</b> to move.<br />
+        Press <b>space</b> to drop a bomb.<br />
+        Destroy all breakable walls to win.<br />
+        Avoid bomb explosions!
+      </div>
+    </div>
   </div>
 </template>
 
@@ -77,6 +104,9 @@ const maxBombs = ref(1)
 const activeBombs = ref(0)
 const bombCapacityItemPos = ref(null)
 const bombCapacityItemVisible = ref(false)
+const timer = ref(0)
+const timerInterval = ref(null)
+const finalTime = ref(null)
 
 function cellClass(row, col) {
   if (player.value.row === row && player.value.col === col) return 'cell player'
@@ -182,6 +212,7 @@ function explodeBomb(row, col) {
   // Check if player is in explosion area
   if (positions.some(pos => pos.row === player.value.row && pos.col === player.value.col)) {
     gameOver.value = true
+    if (timerInterval.value) clearInterval(timerInterval.value)
   }
   for (const pos of positions) {
     if (grid.value[pos.row] && grid.value[pos.row][pos.col] === 2) {
@@ -199,6 +230,8 @@ function explodeBomb(row, col) {
   // Check win condition
   if (!grid.value.flat().includes(2)) {
     gameWon.value = true
+    finalTime.value = timer.value
+    if (timerInterval.value) clearInterval(timerInterval.value)
   }
   setTimeout(() => {
     explosion.value = []
@@ -252,16 +285,28 @@ function restartGame() {
   explosionRange.value = 1
   maxBombs.value = 1
   activeBombs.value = 0
+  timer.value = 0
+  finalTime.value = null
+  if (timerInterval.value) clearInterval(timerInterval.value)
+  timerInterval.value = setInterval(() => {
+    timer.value++
+  }, 1000)
 }
 
 onMounted(() => {
   grid.value = initialGridWithPower()
   bomb.value = []
   window.addEventListener('keydown', handleKey)
+  timer.value = 0
+  finalTime.value = null
+  timerInterval.value = setInterval(() => {
+    timer.value++
+  }, 1000)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKey)
   if (bomb.value && bomb.value.timer) clearTimeout(bomb.value.timer)
+  if (timerInterval.value) clearInterval(timerInterval.value)
 })
 </script>
 
@@ -404,5 +449,39 @@ onBeforeUnmount(() => {
 }
 .game-won button:hover {
   background: #238;
+}
+.legend {
+  margin-top: 1.5rem;
+  background: #222;
+  border: 2px solid #444;
+  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  color: #fff;
+  font-family: monospace;
+  max-width: 350px;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.legend-icon {
+  display: inline-block;
+  margin-right: 0.7em;
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+}
+.instructions {
+  margin-top: 1.2rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.timer {
+  font-size: 1.3rem;
+  color: #000;
+  font-family: monospace;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 </style> 
