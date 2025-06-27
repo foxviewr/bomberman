@@ -27,6 +27,22 @@ A simple Bomberman-inspired browser game built with **Node.js**, **VueJS**, and 
    ```
 4. Open your browser and go to [http://localhost:3000](http://localhost:3000)
 
+## How to Run in Production
+
+To run the Bomberman game in a production environment:
+
+1. **Build the application:**
+   ```bash
+   npm run build
+   ```
+2. **Start the production server:**
+   ```bash
+   npm run preview
+   ```
+3. Open your browser and go to [http://localhost:3000](http://localhost:3000)
+
+This will serve the optimized production build of the game. You can use process managers like PM2 or Docker for advanced deployment scenarios.
+
 ## How to Play
 
 - **Move:** Use the arrow keys (↑, ↓, ←, →) to move your character.
