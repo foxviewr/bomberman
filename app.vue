@@ -1,6 +1,10 @@
 <template>
   <div>
     <NuxtRouteAnnouncer />
-    <NuxtWelcome />
+    <BombermanGame />
   </div>
 </template>
+
+<script setup>
+import BombermanGame from './components/BombermanGame.vue'
+</script>
