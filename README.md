@@ -14,7 +14,7 @@ A simple Bomberman-inspired browser game built with **Node.js**, **VueJS**, and 
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
+   git clone git@github.com:foxviewr/bomberman.git
    cd bomberman
    ```
 2. **Install dependencies:**
