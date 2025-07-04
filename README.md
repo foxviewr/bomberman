@@ -2,46 +2,92 @@
 
 A simple Bomberman-inspired browser game built with **Node.js**, **VueJS**, and **Nuxt.js**.
 
-## Game Description
+---
 
-- Navigate a grid-based map, drop bombs to destroy breakable walls, and collect power-ups.
-- Avoid bomb explosions and try to clear all breakable walls to win!
-- Features:
-  - Power-ups to increase bomb explosion area and allow multiple bombs at once.
-  - Timer to track your completion time.
+## Prerequisites
 
-## How to Install and Run Locally
+- **Docker**
+- **Terraform** (>= 1.0.0)
 
-1. **Clone the repository:**
-   ```bash
-   git clone git@github.com:foxviewr/bomberman.git
-   cd bomberman
+### Install Docker
+- [Download Docker Desktop](https://www.docker.com/products/docker-desktop/) and follow the installation instructions for your OS.
+- After installation, verify Docker is running:
+  ```sh
+  docker --version
+  docker info
+  ```
+
+### Install Terraform
+- [Download Terraform](https://developer.hashicorp.com/terraform/downloads) and follow the installation instructions for your OS.
+- After installation, verify Terraform is installed:
+  ```sh
+  terraform version
+  ```
+
+---
+
+## Project Setup
+
+### 1. Clone the Repository
+```sh
+git clone git@github.com:foxviewr/bomberman.git
+cd bomberman
+```
+
+### 2. Build and Run with Docker & Terraform
+
+#### a. Build the Docker Images and Start Containers
+
+1. **Initialize Terraform:**
+   ```sh
+   cd terraform
+   terraform init
    ```
-2. **Install dependencies:**
-   ```bash
-   npm install
+2. **Apply the Terraform configuration:**
+   ```sh
+   terraform apply
    ```
-3. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-4. Open your browser and go to [http://localhost:3000](http://localhost:3000)
+   - Approve the plan when prompted.
 
-## How to Run in Production
+#### b. Access the Game
+- **Production (SSR) mode:** [http://localhost:8087](http://localhost:8087)
+- **Development (hot reload) mode:** [http://localhost:8093](http://localhost:8093)
 
-To run the Bomberman game in a production environment:
+---
 
-1. **Build the application:**
-   ```bash
-   npm run build
-   ```
-2. **Start the production server:**
-   ```bash
-   npm run preview
-   ```
-3. Open your browser and go to [http://localhost:3000](http://localhost:3000)
+## Custom Docker & Terraform Configurations
 
-This will serve the optimized production build of the game. You can use process managers like PM2 or Docker for advanced deployment scenarios.
+- **Production (SSR) Container:**
+  - Uses `Dockerfile` to build and run the Nuxt SSR server on port 3000 (mapped to 8087 on your host).
+- **Development Container:**
+  - Uses `Dockerfile.dev` to run `npm run dev` on port 3000 (mapped to 8093 on your host).
+- **Terraform** manages both containers and images. See `terraform/main.tf` for details.
+
+---
+
+## Stopping and Cleaning Up
+
+To stop and remove all containers:
+```sh
+cd .. # if you're in the terraform directory
+./cleanup_docker.sh
+```
+
+---
+
+## Troubleshooting
+
+- If you see the default Nginx page or changes are not reflected, try:
+  - Running `./cleanup_docker.sh` to remove old containers.
+  - Rebuilding the Docker images with `docker build --no-cache ...`.
+  - Forcing Terraform to recreate containers:
+    ```sh
+    terraform apply -replace="docker_container.bomberman"
+    terraform apply -replace="docker_container.bomberman_dev"
+    ```
+- For browser cache issues, use a hard refresh (`Cmd+Shift+R` or `Ctrl+Shift+R`) or open in incognito mode.
+
+---
 
 ## How to Play
 
