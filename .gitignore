@@ -22,3 +22,21 @@ logs
 .env
 .env.*
 !.env.example
+
+# Docker
+*.tar
+*.img
+.docker/
+.dockerignore
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*
+crash.log
+*.tfplan
+*.tfstate.backup
+
+# Ignore cleanup script output (if any)
+cleanup_docker.sh~
