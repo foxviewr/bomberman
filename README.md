@@ -1,6 +1,6 @@
 # Bomberman Game
 
-A simple Bomberman-inspired browser game built with **Node.js**, **VueJS**, and **Nuxt.js**.
+A simple Bomberman-inspired browser game built with **Node.js**, **VueJS**, **Nuxt.js** and **Docker/Terraform**.
 
 ---
 
@@ -38,6 +38,14 @@ cd bomberman
 
 #### a. Build the Docker Images and Start Containers
 
+You can use the provided script to initialize and apply the Terraform configuration (this will start the Docker containers):
+```sh
+./start_docker.sh
+```
+This script will automatically run `terraform init` and `terraform apply` in the `terraform` directory.
+
+Alternatively, you can run the steps manually:
+
 1. **Initialize Terraform:**
    ```sh
    cd terraform
@@ -65,13 +73,25 @@ cd bomberman
 
 ---
 
-## Stopping and Cleaning Up
+## Managing Containers
 
-To stop and remove all containers:
-```sh
-cd .. # if you're in the terraform directory
-./cleanup_docker.sh
-```
+- **Start containers:**
+  ```sh
+  ./start_docker.sh
+  ```
+  Initializes and applies the Terraform configuration to start all Docker containers.
+
+- **Stop containers (without removing):**
+  ```sh
+  ./stop_docker.sh
+  ```
+  Stops all Bomberman-related containers, but does not remove them or any images.
+
+- **Stop and remove all containers and images:**
+  ```sh
+  ./cleanup_docker.sh
+  ```
+  Stops and removes all Bomberman containers and images, including those using port 8087.
 
 ---
 
