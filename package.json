@@ -9,6 +9,12 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "overrides": {
+    "picomatch@<2.3.2": "2.3.2",
+    "fontless": {
+      "esbuild": "0.28.2"
+    }
+  },
   "dependencies": {
     "@nuxt/content": "^3.7.0",
     "@nuxt/eslint": "^1.7.1",
